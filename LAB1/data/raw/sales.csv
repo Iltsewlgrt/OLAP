@@ -1,0 +1,11 @@
+sale_id,sale_date,store_id,product_category,product_name,quantity,unit_price,payment_method
+1,2026-09-01,101,Beverages,Tea,2,180.00,card
+2,2026-09-01,101,Snacks,Granola bar,3,95.50,cash
+3,2026-09-02,102,Dairy,Milk,2,89.90,card
+4,2026-09-02,101,Bakery,Bread,1,75.00,card
+5,2026-09-03,103,Fruit,Apples,4,120.00,card
+6,2026-09-03,102,Beverages,Coffee,1,450.00,online
+7,2026-09-04,103,Snacks,Crackers,2,140.00,cash
+8,2026-09-05,101,Dairy,Yogurt,5,65.00,card
+9,2026-09-05,102,Bakery,Croissant,3,110.00,online
+10,2026-09-06,103,Fruit,Bananas,6,80.00,card
