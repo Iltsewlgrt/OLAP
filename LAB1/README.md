@@ -5,7 +5,7 @@
 | Участник | Зона ответственности | Что запушить в GitHub |
 |---|---|---|
 | Участник 1: `Бальцевич Анна Ивановна` | Docker Compose, ClickHouse, инициализация и проверка `ping` | `Стенд/docker-compose.yml`, `Стенд/scripts/init_ch.sh`, `Стенд/README.md`; коммит `feat: add docker analytics stand` |
-| Участник 2: `Лобзик Виктория Александровна` | Тема проекта и подготовка исходного CSV | `data/raw/sales.csv`; раздел «Сырьё»; коммит `feat: add raw retail sales data` |
+| Участник 2: `Лобан Виктория Александровна` | Тема проекта и подготовка исходного CSV | `data/raw/sales.csv`; раздел «Сырьё»; коммит `feat: add raw retail sales data` |
 | Участник 3: `Ерофеева Валерия Евгеньевна` | DuckDB smoke-проверка и общая документация | `README.md`; коммит `docs: document lab 01 and team workflow` |
 
 ## Тема проекта
@@ -97,6 +97,6 @@ duckdb -c "SELECT COUNT(*) AS rows, ROUND(SUM(quantity * unit_price), 2) AS reve
 
 ## Данные студента
 
-- ФИО: `Бальцевич А. И., Лобзик В. А., Ерофеева В. Е.`;
+- ФИО: `Бальцевич А. И., Лобан В. А., Ерофеева В. Е.`;
 - группа: `СДП-ИИ-231`;
 - домен: розничные продажи.
