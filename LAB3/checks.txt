@@ -1,0 +1,45 @@
+﻿-- query 1
+table_name	rows
+dim_customer	25000
+dim_date	2466
+dim_employee	300
+dim_product	35000
+dim_store	30
+dim_supplier	300
+dim_warehouse	6
+fact_interest	200000
+fact_inventory	120000
+fact_logistics	50000
+fact_loyalty	60000
+fact_sales	100000
+fact_visits	150000
+
+-- query 2
+null_customer	null_product	null_store	null_date
+0	0	0	0
+
+-- query 3
+sales_rows	total_quantity	total_revenue_byn	total_cost_byn	total_profit_byn
+100000	350000	10750467.76	9168233.90	1582233.86
+
+-- query 4
+avg_check_byn
+107.5
+
+-- query 5
+payment_method	cnt
+Безналичные	66667
+Наличные	33333
+
+-- query 6
+min_date	max_date
+2020-01-01	2026-10-01
+
+-- query 7
+store_name	revenue
+Продукты Гродно №24	625580.13
+Продукты Гродно №18	620979.77
+Продукты Гродно №12	616567.66
+Продукты Гродно №6	612347.08
+Продукты Гродно №30	603497.70
+

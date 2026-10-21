@@ -1,0 +1,6 @@
+# Generated DuckDB database
+LAB3/warehouse.duckdb
+
+# Python bytecode and caches
+LAB3/__pycache__/
+*.py[cod]
