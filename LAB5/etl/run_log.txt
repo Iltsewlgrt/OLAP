@@ -1,0 +1,49 @@
+===== RUN 1 =====
+LOAD ORDER: dim_store -> dim_warehouse -> dim_supplier -> dim_product -> dim_customer -> dim_employee -> dim_date -> fact_visits -> fact_interest -> fact_sales -> fact_loyalty -> fact_logistics -> fact_inventory
+  OK nulls: fact_sales обязательные поля = 0
+  OK ranges: quantity >= 0, total_amount >= 0, date >= 1900
+  OK duplicates: sale_id unique
+  OK orphans: store_id = 0
+  OK orphans: product_id = 0
+  OK orphans: date_id = 0
+COUNTS:
+  dim_store: 30
+  dim_warehouse: 6
+  dim_supplier: 300
+  dim_product: 35000
+  dim_customer: 25000
+  dim_employee: 300
+  dim_date: 2466
+  fact_visits: 150000
+  fact_interest: 200000
+  fact_sales: 100000
+  fact_loyalty: 60000
+  fact_logistics: 50000
+  fact_inventory: 120000
+CANONICAL_METRIC: SUM(total_amount) = 10750467.76
+FACT_SALES_ROWS: 100000
+
+===== RUN 2 =====
+LOAD ORDER: dim_store -> dim_warehouse -> dim_supplier -> dim_product -> dim_customer -> dim_employee -> dim_date -> fact_visits -> fact_interest -> fact_sales -> fact_loyalty -> fact_logistics -> fact_inventory
+  OK nulls: fact_sales обязательные поля = 0
+  OK ranges: quantity >= 0, total_amount >= 0, date >= 1900
+  OK duplicates: sale_id unique
+  OK orphans: store_id = 0
+  OK orphans: product_id = 0
+  OK orphans: date_id = 0
+COUNTS:
+  dim_store: 30
+  dim_warehouse: 6
+  dim_supplier: 300
+  dim_product: 35000
+  dim_customer: 25000
+  dim_employee: 300
+  dim_date: 2466
+  fact_visits: 150000
+  fact_interest: 200000
+  fact_sales: 100000
+  fact_loyalty: 60000
+  fact_logistics: 50000
+  fact_inventory: 120000
+CANONICAL_METRIC: SUM(total_amount) = 10750467.76
+FACT_SALES_ROWS: 100000
