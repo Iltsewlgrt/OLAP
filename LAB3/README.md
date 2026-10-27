@@ -9,7 +9,6 @@
 LAB3/
 ├── data/raw/              # 13 CSV-файлов
 ├── sql/ddl_duckdb.sql     # DDL: 7 измерений и 6 фактов
-├── convert_grocery_data.py# подготовка продуктового сырья
 ├── load_data.py           # создание и загрузка таблиц
 ├── checks.sql             # проверочные запросы
 ├── run_checks.py          # сохранение результата проверок
