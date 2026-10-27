@@ -26,7 +26,7 @@ curl http://localhost:8123/ping
 curl -u lab:lab123 'http://localhost:8123/?query=SELECT%20count()%20FROM%20lab.raw_sales'
 ```
 
-Ожидаемый результат: `10`.
+Ожидаемый результат: `30000`.
 
 ## DuckDB smoke
 
@@ -37,4 +37,5 @@ python -m pip install -r Стенд/requirements.txt
 duckdb -c "SELECT COUNT(*) AS rows, ROUND(SUM(quantity * unit_price), 2) AS revenue FROM read_csv_auto('data/raw/sales.csv');"
 ```
 
-Ожидаемый результат: `10` строк и `3246.30` выручки.
+Ожидаемый результат: `30000` строк; сумма зависит от сгенерированного
+ассортимента и считается через `SUM(quantity * unit_price)`.

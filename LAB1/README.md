@@ -5,7 +5,7 @@
 | Участник | Зона ответственности | Что запушить в GitHub |
 |---|---|---|
 | Участник 1: `Бальцевич Анна Ивановна` | Docker Compose, ClickHouse, инициализация и проверка `ping` | `Стенд/docker-compose.yml`, `Стенд/scripts/init_ch.sh`, `Стенд/README.md`; коммит `feat: add docker analytics stand` |
-| Участник 2: `Лобан Виктория Александровна` | Тема проекта и подготовка исходного CSV | `data/raw/sales.csv`; раздел «Сырьё»; коммит `feat: add raw retail sales data` |
+| Участник 2: `Лобан Виктория Александровна` | Тема проекта и подготовка исходных CSV | `data/raw/`; раздел «Сырьё»; коммит `feat: add raw retail sales data` |
 | Участник 3: `Ерофеева Валерия Евгеньевна` | DuckDB smoke-проверка и общая документация | `README.md`; коммит `docs: document lab 01 and team workflow` |
 
 ## Тема проекта
@@ -19,10 +19,13 @@
 ```text
 .
 ├── 01_З01_стенд_и_сырьё.md
+├── generate_raw_data.py
 ├── README.md
 ├── data/
 │   └── raw/
-│       └── sales.csv
+│       ├── products.csv
+│       ├── sales.csv
+│       └── stores.csv
 └── Стенд/
     ├── README.md
     ├── docker-compose.yml
@@ -59,7 +62,7 @@ Ok.
 curl -u lab:lab123 'http://localhost:8123/?query=SELECT%20count()%20FROM%20lab.raw_sales'
 ```
 
-Ожидаемый результат: `10`.
+Ожидаемый результат: `30000`.
 
 Остановка стенда:
 
@@ -76,11 +79,18 @@ python -m pip install -r Стенд/requirements.txt
 duckdb -c "SELECT COUNT(*) AS rows, ROUND(SUM(quantity * unit_price), 2) AS revenue FROM read_csv_auto('data/raw/sales.csv');"
 ```
 
-Ожидаемый результат: `10` строк и выручка `3246.30`.
+Ожидаемый результат: `30000` строк. Выручка рассчитывается по формуле
+`SUM(quantity * unit_price)`.
 
 ## Сырьё
 
-Исходный файл: [data/raw/sales.csv](data/raw/sales.csv). В нём 10 строк и 8 колонок:
+Исходные файлы находятся в [data/raw/](data/raw/):
+
+- [sales.csv](data/raw/sales.csv) — 30 000 строк продаж;
+- [stores.csv](data/raw/stores.csv) — 30 магазинов;
+- [products.csv](data/raw/products.csv) — 120 товаров.
+
+Файл `sales.csv` содержит 30 000 строк и 8 колонок:
 
 | Колонка | Описание |
 |---|---|
