@@ -32,11 +32,23 @@ def main() -> None:
         raise SystemExit("Usage: py -3.13 etl/run_sql.py <sql-file>")
 
     sql_file = Path(sys.argv[1])
+    output_lines: list[str] = []
     for number, statement in enumerate(split_sql(sql_file.read_text(encoding="utf-8")), 1):
-        print(f"--- statement {number} ---")
+        output_lines.append(f"--- statement {number} ---")
         result = execute(statement)
         if result:
-            print(result)
+            output_lines.append(result)
+
+    output = "\n".join(output_lines) + "\n"
+    print(output, end="")
+    if sql_file.name == "analytics_clickhouse.sql":
+        (sql_file.parents[1] / "notes" / "queries_output.txt").write_text(
+            output, encoding="utf-8"
+        )
+    elif sql_file.name == "partitioned_fact_sales.sql":
+        (sql_file.parents[1] / "notes" / "partitioned_output.txt").write_text(
+            output, encoding="utf-8"
+        )
 
 
 if __name__ == "__main__":
