@@ -64,4 +64,5 @@ py -3.13 etl\run_sql.py dashboards\validation.sql
 ```
 
 Скриншот дашборда не обязателен: в репозитории сохранены описание, SQL
-виджетов и инструкция подключения ClickHouse.
+виджетов и инструкция подключения ClickHouse. Скриншот готового дашборда:
+[images/dashboard.png](images/dashboard.png).
