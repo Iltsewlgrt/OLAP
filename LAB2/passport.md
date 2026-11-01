@@ -20,10 +20,12 @@
 
 | Имя | Grain | Примечание |
 |---|---|---|
-| `fact_sales` | одна строка = одна позиция в чеке (`sale_id` + `product_id`) | Продажи, количество, цена и сумма позиции. |
-| `fact_orders` | одна строка = одна позиция заказа (`order_id` + `product_id`) | Заказы клиентов до этапа доставки; хранит количество и стоимость. |
-| `fact_inventory` | одна строка = остаток товара в магазине на одну дату (`snapshot_date` + `store_id` + `product_id`) | Ежедневный снимок складских остатков. |
-| `fact_logistics` | одна строка = одна отправка по заказу (`shipment_id` + `order_id`) | Даты отправки и доставки, магазин и стоимость доставки. |
+| `fact_visits` | одна строка = одно посещение магазина (`visit_id`) | Посещения, длительность и факт покупки. |
+| `fact_interest` | одна строка = один интерес к товару в рамках посещения (`interest_id`) | Просмотр, консультация и покупка товара. |
+| `fact_sales` | одна строка = одна позиция в чеке (`sale_id`) | Продажи, количество, цена и сумма позиции. |
+| `fact_loyalty` | одна строка = одна операция по бонусам (`loyalty_id`) | Начисление, списание и баланс бонусов. |
+| `fact_logistics` | одна строка = одна поставка (`shipment_id`) | Перемещение товара между поставщиком, складом и магазином. |
+| `fact_inventory` | одна строка = один остаток товара (`inventory_id`) | Остатки товара на дату в магазине и на складе. |
 
 ## 4. Меры
 
@@ -36,26 +38,28 @@
 | `stock_quantity` | `SUM` допустим с оговоркой | Остаток в `fact_inventory`; суммируем по товарам и магазинам на одну дату, но не по датам. |
 | `delivery_cost` | `SUM` допустим | Стоимость доставки в `fact_logistics`. |
 | `delivery_days` | `SUM` не используется | Длительность доставки; считаем среднее или медиану. |
+| `purchase_amount` | `SUM` допустим | Сумма покупки, зафиксированная при посещении. |
+| `accrued`, `spent` | `SUM` допустим | Начисленные и потраченные бонусы. |
+| `closing_stock` | `SUM` допустим с оговоркой | Остаток товара; не суммируем один товар по нескольким датам. |
 
 ## 5. Измерения
 
 | Измерение | Ключ | Основные атрибуты | История |
 |---|---|---|---|
-| `dim_product` | `product_id` | `product_name`, `category`, `brand`, `unit`, `price`, `supplier_id` | **SCD2** для категории, бренда и цены: изменение этих атрибутов должно сохранять историю. |
+| `dim_product` | `product_id` + версия | `product_name`, `category`, `manufacturer_name`, `retail_price`, `supplier_id`, `valid_from`, `valid_to`, `is_current` | **SCD2**: история категории, производителя и цены сохраняется в версиях. |
 | `dim_store` | `store_id` | `store_name`, `region`, `city`, `address` | **SCD1**: текущие название и адрес заменяют старые. |
 | `dim_customer` | `customer_id` | `full_name`, `gender`, `age`, `city`, `loyalty_card`, `register_date` | **SCD1**: храним только текущее состояние клиента. |
-| `dim_date` | `date_key` | `date`, `month`, `quarter`, `year`, `weekday` | **Пока не трогаем**: календарь является статичным справочником. |
-| `dim_payment` | `payment_type` | `payment_type` | **Пока не трогаем**: это небольшой фиксированный список способов оплаты. |
+| `dim_date` | `date_id` | `date`, `month`, `month_num`, `quarter`, `year`, `weekday` | **Пока не трогаем**: календарь является статичным справочником. |
 
 Связи факта с измерениями:
 
 | Поле факта | Измерение |
 |---|---|
-| `customer_id` в `fact_sales` и `fact_orders` | `dim_customer.customer_id` |
-| `product_id` в продажах, заказах и остатках | `dim_product.product_id` |
-| `store_id` в продажах и остатках | `dim_store.store_id` |
-| `payment_type` в продажах и заказах | `dim_payment.payment_type` |
-| любая дата события | `dim_date.date_key` |
+| `customer_id` в фактах продаж, посещений, интереса и бонусов | `dim_customer.customer_id` |
+| `product_id` в фактах продаж, интереса, поставок и остатков | `dim_product.product_id` |
+| `store_id` в фактах продаж, посещений, интереса, поставок и остатков | `dim_store.store_id` |
+| `date_id` в продажах, посещениях, интересе, бонусах и остатках | `dim_date.date_id` |
+| `payment_method` в `fact_sales` | строковый атрибут факта; отдельного `dim_payment` нет |
 
 ## 6. Три бизнес-вопроса
 
@@ -80,27 +84,29 @@ FROM fact_sales;
 Расчёт вынесен в [LAB4/sql/canonical_metric.sql](../LAB4/sql/canonical_metric.sql).
 Зафиксированное значение после запуска на витрине LAB3: `10 750 467.76 BYN`.
 
-Историю изменений справочника товаров оставляем кандидатом на реализацию в
-З06: нужны версии строк с `valid_from` и `valid_to`. Для магазинов и клиентов
-сразу выбираем SCD1, то есть старые значения заменяются текущими.
+История изменений справочника товаров реализована в LAB6: версии содержат
+`valid_from`, `valid_to` и `is_current`. Для магазинов и клиентов
+выбираем SCD1, то есть старые значения заменяются текущими. Фактический
+DDL LAB3 содержит шесть фактов: `fact_visits`, `fact_interest`, `fact_sales`,
+`fact_loyalty`, `fact_logistics` и `fact_inventory`.
 
 Пример разреза по месяцам:
 
 ```sql
 SELECT
     d.year,
-    d.month,
+    d.month_num,
     SUM(f.total_amount) AS revenue
 FROM fact_sales AS f
 JOIN dim_date AS d
-    ON d.date_key = CAST(f.sale_datetime AS DATE)
+    ON d.date_id = f.date_id
 WHERE d.year = 2024
-GROUP BY d.year, d.month
-ORDER BY d.year, d.month;
+GROUP BY d.year, d.month_num
+ORDER BY d.year, d.month_num;
 ```
 
 ## 8. Ограничения модели
 
 Подробные ограничения и последствия для отчётов зафиксированы в [cut.md](./cut.md).
-Схема связей приведена в [star.md](./star.md). В текущем сырье заполнен
-`fact_sales`; для остальных фактов понадобятся дополнительные источники.
+Схема связей приведена в [star.md](./star.md). Витрина содержит шесть фактов,
+а `fact_sales` остаётся главным фактом для расчёта оборота.

@@ -1,0 +1,23 @@
+-- query 1
+Success
+
+-- query 2
+Count
+
+-- query 3
+Count
+6
+
+-- query 4
+product_id	product_name	category	manufacturer_name	retail_price	valid_from	valid_to	is_current
+1	Хлеб Савушкин продукт 1	Хлеб и выпечка	Савушкин продукт	1.55	2020-01-01	2024-02-01	False
+1	Хлеб Савушкин продукт 1	Готовая выпечка	Савушкин продукт	1.70	2024-02-01	9999-12-31	True
+
+-- query 5
+sale_date	product_id	category
+2024-01-15	1	Хлеб и выпечка
+2024-02-15	1	Готовая выпечка
+
+-- query 6
+total_versions	unique_products	current_versions
+6	5	5
