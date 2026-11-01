@@ -81,13 +81,13 @@ CREATE TABLE IF NOT EXISTS olap_product.fact_sales (
     total_amount Nullable(Decimal(14, 2)), cost_amount Nullable(Decimal(14, 2)),
     profit_amount Nullable(Decimal(14, 2)), payment_method String, sale_type String,
     receipt_number String, currency String
-) ENGINE = MergeTree ORDER BY (date_id, store_id, sale_id);
+) ENGINE = MergeTree ORDER BY sale_id;
 
 CREATE TABLE IF NOT EXISTS olap_product.fact_loyalty (
     loyalty_id Int32, customer_id Nullable(Int32), date_id Int32, sale_id Nullable(Int32),
     operation String, accrued Nullable(Decimal(14, 2)), spent Nullable(Decimal(14, 2)),
     balance Nullable(Decimal(14, 2)), reason String, customer_level String, currency String
-) ENGINE = MergeTree ORDER BY (date_id, customer_id, loyalty_id);
+) ENGINE = MergeTree ORDER BY loyalty_id;
 
 CREATE TABLE IF NOT EXISTS olap_product.fact_logistics (
     shipment_id Int32, product_id Nullable(Int32), supplier_id Nullable(Int32),

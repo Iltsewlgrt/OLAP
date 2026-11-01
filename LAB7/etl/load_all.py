@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
-import csv
 import re
 import urllib.parse
 import urllib.request
+from urllib.error import HTTPError, URLError
 from pathlib import Path
 
 
@@ -28,14 +28,23 @@ TABLES = [
 
 
 def request(query: str, body: bytes | None = None) -> str:
-    payload = query.encode("utf-8") if body is None else body
-    request_object = urllib.request.Request(BASE_URL, data=payload, method="POST")
+    request_object = urllib.request.Request(
+        BASE_URL + "?" + urllib.parse.urlencode({"query": query}),
+        data=body,
+        method="POST",
+    )
     request_object.add_header("X-ClickHouse-User", AUTH[0])
     request_object.add_header("X-ClickHouse-Key", AUTH[1])
-    if body is not None:
-        request_object.full_url = BASE_URL + "?query=" + urllib.parse.quote(query)
-    with urllib.request.urlopen(request_object, timeout=60) as response:
-        return response.read().decode("utf-8").strip()
+    try:
+        with urllib.request.urlopen(request_object, timeout=60) as response:
+            return response.read().decode("utf-8").strip()
+    except HTTPError as error:
+        details = error.read().decode("utf-8", errors="replace").strip()
+        raise RuntimeError(
+            f"ClickHouse rejected query ({error.code}): {details or error.reason}"
+        ) from error
+    except URLError as error:
+        raise RuntimeError(f"ClickHouse is unavailable: {error.reason}") from error
 
 
 def split_sql(sql: str) -> list[str]:
