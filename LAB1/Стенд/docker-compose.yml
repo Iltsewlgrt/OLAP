@@ -21,7 +21,7 @@ services:
       retries: 20
 
   metabase:
-    image: metabase/metabase:v0.50.26
+    image: metabase/metabase:latest
     container_name: lab1-metabase
     ports:
       - "3000:3000"
