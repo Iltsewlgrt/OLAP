@@ -1,0 +1,12 @@
+LAB7 load log
+==============
+
+Static validation completed:
+- `py -3.13 -m py_compile etl/load_all.py` passed.
+- `git diff --check` passed.
+
+Runtime validation is blocked on this machine because Docker Desktop is not
+running and ClickHouse is unavailable at http://localhost:8123/ping.
+
+After starting Docker Desktop, run `py -3.13 etl/load_all.py` twice. The
+script writes the runtime counts and canonical metric to this file.
